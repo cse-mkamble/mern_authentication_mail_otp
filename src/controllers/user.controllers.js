@@ -7,6 +7,7 @@ const jwt = require("jsonwebtoken");
 
 // const { mailgunHelper } = require("../config/mailgun");
 const { sendMail } = require("../config/sendMail");
+const mailMessage = require("../config/mailMessage");
 const { otplibAuthenticator } = require("../config/otplib");
 
 const signup = async (req, res) => {
@@ -28,16 +29,10 @@ const signup = async (req, res) => {
 
     if (userExists && !userExists.verified) {
       const otp = otplibAuthenticator.generate(userExists.email);
-
-      const mailData = {
-        from: process.env.MAILGUN_FROM,
-        to: userExists.email,
-        subject: `Your OTP is ${otp}`,
-        text: `Your OTP for MERN Authentication is ${otp}`
-      };
-
+      const subjectMail = `Your OTP is ${otp}`
+      const message = mailMessage(`<div>Your OTP for MERN Authentication is ${otp}</div>`)
       try {
-        // await mailgunHelper.messages().send(mailData);
+        sendMail({ to: userExists.email, subject: subjectMail, text: message });
       } catch (err) {
         console.log(err);
         return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
@@ -69,16 +64,11 @@ const signup = async (req, res) => {
     const user = await User.create({ email, password });
 
     const otp = otplibAuthenticator.generate(user.email);
-
-    const mailData = {
-      from: process.env.MAILGUN_FROM,
-      to: user.email,
-      subject: `Your OTP is ${otp}`,
-      text: `Your OTP for MERN Authentication is ${otp}`
-    };
+    const subjectMail = `Your OTP is ${otp}`
+    const message = mailMessage(`<div>Your OTP for MERN Authentication is ${otp}</div>`)
 
     try {
-      // await mailgunHelper.messages().send(mailData);
+      sendMail({ to: user.email, subject: subjectMail, text: message });
     } catch (err) {
       console.log(err);
       return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
