@@ -1,0 +1,20 @@
+
+
+# dependencies
+npm install bcrypt --save 
+npm install cors --save 
+npm install dotenv --save 
+npm install express --save 
+npm install express-validator --save 
+npm install http-status-codes --save 
+npm install jsonwebtoken --save 
+npm install mailgun-js --save 
+npm install mongoose --save 
+npm install nodemon --save 
+npm install otplib --save 
+npm install concurrently --save
+npm install nodemailer --save
+
+# devDependencies
+npm install --save-dev eslint
+npm install --save-dev nodemon
